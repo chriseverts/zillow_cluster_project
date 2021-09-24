@@ -80,7 +80,7 @@ def get_zillow_heatmap(train):
     '''
     sns.set()
     plt.figure(figsize=(8,12))
-    heatmap = sns.heatmap(train.corr()[['logerror']].sort_values(by='logerror', ascending=False), vmin=-.5, vmax=.5, annot=True)
+    heatmap = sns.heatmap(train.corr()[['logerror']].sort_values(by='logerror', ascending=False), vmin=-.10, vmax=.10, annot=True)
     heatmap.set_title('Feautures Correlating with Log Error')
     
     return heatmap

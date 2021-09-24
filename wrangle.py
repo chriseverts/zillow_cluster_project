@@ -144,27 +144,10 @@ def create_features(df):
     df['structure_dollar_per_sqft'] = df.structuretaxvaluedollarcnt/df.calculatedfinishedsquarefeet
 
 
-    df['structure_dollar_sqft_bin'] = pd.cut(df.structure_dollar_per_sqft, 
-                                             bins = [0, 25, 50, 75, 100, 150, 200, 300, 500, 1000, 1500],
-                                             labels = [0, .1, .2, .3, .4, .5, .6, .7, .8, .9]
-                                            )
-
-
-    # dollar per square foot-land
-    df['land_dollar_per_sqft'] = df.landtaxvaluedollarcnt/df.lotsizesquarefeet
-
-    df['lot_dollar_sqft_bin'] = pd.cut(df.land_dollar_per_sqft, bins = [0, 1, 5, 20, 50, 100, 250, 500, 1000, 1500, 2000],
-                                       labels = [0, .1, .2, .3, .4, .5, .6, .7, .8, .9]
-                                      )
-
-
+   
     # update datatypes of binned values to be float
-    df = df.astype({'sqft_bin': 'float64', 'acres_bin': 'float64', 'age_bin': 'float64',
-                    'structure_dollar_sqft_bin': 'float64', 'lot_dollar_sqft_bin': 'float64'})
+    df = df.astype({'sqft_bin': 'float64', 'acres_bin': 'float64', 'age_bin': 'float64',})
 
-
-    # ratio of bathrooms to bedrooms
-    df['bath_bed_ratio'] = df.bathroomcnt/df.bedroomcnt
 
     # 12447 is the ID for city of LA. 
     # I confirmed through sampling and plotting, as well as looking up a few addresses.
@@ -172,19 +155,6 @@ def create_features(df):
     
     return df
 
-def remove_outliers_new_features(df):
-    '''
-    remove outliers in bed, bath, zip, square feet, acres & tax rate
-    '''
-
-    return df[((df.bathroomcnt <= 7) & (df.bedroomcnt <= 7) & 
-               (df.regionidzip < 100000) & 
-               (df.bathroomcnt > 0) & 
-               (df.bedroomcnt > 0) & 
-               (df.acres < 20) &
-               (df.calculatedfinishedsquarefeet < 10000) & 
-               (df.taxrate < 10)
-              )]
 
 #####
 def prepare_zillow(df):
@@ -203,6 +173,8 @@ def prepare_zillow(df):
     #county dummy columns
     df = get_counties(df)
     
+    #create features
+    df = create_features(df)
     
     # remove outliers in bed count, bath count, and area to better target single unit properties
     df = remove_outliers(df, 1.5, ['calculatedfinishedsquarefeet', 'bedroomcnt', 'bathroomcnt'])
@@ -216,12 +188,7 @@ def prepare_zillow(df):
     #filling null yearbuilt with 2017
     df['yearbuilt'].fillna(2017, inplace = True)
     
-    #create features
-    df = create_features(df)
-    
-    #drop outliers from new features
-    df = remove_outliers_new_features(df)
-    
+      
     #rename columns for easier reference
     df = df.rename(columns={
                             'parcelid': 'parcel_id',
@@ -244,10 +211,7 @@ def prepare_zillow(df):
     dummies = pd.get_dummies(df['county'])
     df = pd.concat([df, dummies],axis=1)
     
-    #combine number of bathrooms and bedrooms
-    df['bathsandbeds'] = df.baths + df.beds
     return df
-
 
 def train_validate_test_split(df, target, seed=1349):
     '''
