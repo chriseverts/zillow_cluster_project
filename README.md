@@ -25,40 +25,70 @@ I incorporated clustering to discover keys drivers in logerror of zestimates usi
 
 ## Data Dictionary 
 
-| Column Name                  | Renamed   | Info                                            |
-|------------------------------|-----------|-------------------------------------------------|
-| 
+| Column Name               | Description                              |
+|---------------------------|------------------------------------------|
+| acres                     | number of acres (lotsize/43560)          |
+| age                       | 2017-yearbuilt                           |
+| baths                     | number of bathrooms                      |
+| bathsandbeds              | number of bathrooms and bedrooms         |
+| beds                      | number of bedrooms                       |
+| county                    | which county property is in              |
+| fips                      | FIPS code of property                    |
+| land_dollar_per_sqft      | landtaxvaluedollarcnt/sqft               |
+| latitude                  | latitude coordinate                      |
+| longitude                 | longitude coordinate                     |
+| los_angeles               | if property is in Los Angeles =1, else 0 |
+| lot_dollar                | dollar value for property land           |
+| orange                    | if property is in Orange =1, else 0      |
+| rawcensustractandblock    | census bureau data                       |
+| regionidzip               | zip code (not accurate)                  |
+| sqft                      | square footage of property               |
+| structure_dollar_per_sqft | dollar per square foot                   |
+| tax_amount                | tax amount of property                   |
+| tax_rate                  | tax rate of property                     |
+| tax_value                 | tax value of property                    |
+| ventura                   | if county is in Ventura =1, else 0       |
+| yearbuilt                 | year property was built                  |
+| propertylandusetype       | property type                            |
+| parcelid                  | property ID                              |
+
+
 <br>
 
-## Hypothesis 
+##  Hypothesis 
 
-1.) Log error is affected by square footage, number of bedrooms
+- Logerror is affected by squared feet over 1700 sq ft. 
 
-2.) Log error is affected by square footage
+- Logerror is affected by the number of bedrooms
 
-3.) Log error is affected by longitude and lattitude
+- Logerror is affected by the number of acres
 
-4.) Log error is affected by baths, square foot, ad tax amount
+- Logerror is affected by location
+
+- Logerror is affected by tax value per square feet
+
+- Logerror is effected by a combintaion of house features and also location + land
 
 ## Findings and Next Steps 
-   - 
+ - There appears to be distinct groups between longitude/latitude, and dollar per sqft/number of bedrooms, and acreage 
+ - Using recursive feature elimination, it selected dollar per sqft, number of bathrooms, county, census block, and calculatedbathnbr .
 
 
 Next steps would be:
  - gather more information on location
- -  
+ - Try out new combinations for clustering with these as well as other columns with other property features.
 
 
 # The Pipeline
 
 ## Planning 
-Goal: Plan out the project
-How does certain features effect the logerror
+Goal: Plan out the project I will be seeing how square footage, bedroom count, longitude, latitude, acreage, age, and county relate to log error of Zestimates. I will try to cluster by location and by land features to see if it'll be helpful to a supervised regression model.
 
-I also want to look into other features, like age and see if that will also correlate to property value. 
-A lot of these features could play hand in hand and help my model make better predictions.
+First, I will begin by bringing in my data and exploring features to assure that I want to continue with clustering these (and/or others), I can then turn it into a cluster column and use feature selection to see if the clustering helps.
 
-Hypotheses: Square footage, beds and bathrooms, and location will have an effect on the logerror
+
+
+Hypotheses: Square footage, beds, acreage and location will have an effect on the logerror
 
 
 ## Acquire 
@@ -66,8 +96,6 @@ Goal: Have Zillow dataframe ready to prepare in first part of wrangle.py In this
 
 ## Prep 
 Goal: Have Zillow dataset that is split into train, validate, test, and ready to be analyzed. Assure data types are appropriate and that missing values/duplicates/outliers are addressed. Put this in our wrangle.py file as well. In this stage, I handled missing values by dropping any rows and columns with more than 50% missing data.
-
-I assured that all columns had a numeric data type, and renamed them for ease of use.
 
 Duplicates were dropped (in parcelid)
 
@@ -78,28 +106,31 @@ Nulls in calculatedbathnbr, full bath count, region id city, regionidzip, and ce
 Any remaining nulls after these were dropped. I split the data into train, validate, test, X_train, y_train, X_validate, y_validate, X_test, and y_test. Last, I scaled it on a StandardScaler scaler (I made sure to drop outliers first!) and also returned X_train, X_validate, and X_test scaled.
 
 ## Explore 
-Goal: Visualize the data and explore relationships. Use the visuals and statistics tests to help answer your questions. 
-I plotted distributions, made sure nothing was out of the ordinary after cleaning the dataset. 
-Plotted a pairplot to see combinations of variables.
-I ran t-tests with the features in respect to logerror. Also a few to see if the independent variables were related to each other. 
+Goal: Visualize the data. Explore relationships, and make clusters. Use the visuals and statistics tests to help answer my questions. I plotted distributions, made sure nothing was out of the ordinary after cleaning the dataset.
 
+I ran a few t-tests with the features in respect to log error to test for difference in means. Also did a few correlation tests for continuous variables.
 
-## Modeling and Evaluation 
-Goal: Along with regression models, clusters were used to identify statistical relationship to logerror
+I found that square footage, bedroom count, and acres over 2 were all statistically significant. They are not independent to logerror. Square footage less then 1500 did not have an effect on logerror
 
-The models worked best with xxxxxx. Polynomial Regression performed the best, so I did a test on it.
+## Modeling and Evaluation
+Goal: develop a regression model that performs better than the baseline.
+
+The models worked best with $/sqft, acres, cluster, and locations. Polynomial Regression performed the best, so I did a test on it.
 
 | Model                            | RMSE Training | RMSE Validate | R^2   |
 |----------------------------------|---------------|---------------|-------|
-| Baseline                         |     |    |  |
-| LinearRegression                 |     |    |  |
-| LassoLars                        |    |    |  |
-| TweedieRegressor                 |    |     |  |
-| PolynomialRegression (3 degrees) |     |     | |
+| Baseline                         | 0.1688        | 0.1608        | 0.00  |
+| OLS LinearRegression             | 0.1687        | 0.1602        | 0.003 |
+| LassoLars                        | 0.1688        | 0.1604        | 0.00  |
+| TweedieRegressor                 | 0.1687        | 0.1603        | 0.002 |
+| PolynomialRegression (3 degrees) | 0.1687        | 0.1602        | 0.002 |
+<br>
 
-Test:
- - RMSE of 
- - R^2 of 
+Test for OLS Linear Regression:
+ - RMSE of 0.174
+ - R^2 of 0.004
+
+
 
 ## Delivery 
 A final notebook walkthrough of the my findings will be given 
@@ -109,6 +140,12 @@ A final notebook walkthrough of the my findings will be given
 
 # Conclusion 
 
+
+My clustering didn't help with my supervised model, however, I could not find the right combinations to make my model beat the baseline for predicting log error either.
+
+ - Log error was different for properties depending on county, number of bedrooms, dollar per square foot, and acres.
+ - I made clusters with tax value and square footage, longitude and latitude, and based on property features like age, dollar per sqft, and acreage. I also made one based on location (neighborhoods) which consisted of longitude, latitude, and acreage bins.
+  - My best model was my cubic model (3 degrees), but even though it surpassed the baseline on train and validate, it did not perform better on the test. The RMSE to beat was 0.160, but mine was 0.174. It did better on r^2 at only 0.002 though. 
 
 
 # How to Recreate Project
