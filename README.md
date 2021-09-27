@@ -30,15 +30,19 @@ I incorporated clustering to discover keys drivers in logerror of zestimates usi
 | 
 <br>
 
-## Hypothesis 
+##  Hypothesis 
 
-1.) Log error is affected by square footage, number of bedrooms
+- Logerror is affected by squared feet over 1500 sq ft. 
 
-2.) Log error is affected by square footage
+- Logerror is affected by the number of bedrooms
 
-3.) Log error is affected by longitude and lattitude
+- Logerror is affected by the number of acres
 
-4.) Log error is affected by baths, square foot, ad tax amount
+- Logerror is affected by location
+
+- Logerror is affected by tax value per square feet
+
+- Logerror is effected by a combintaion of house features and also location + land
 
 ## Findings and Next Steps 
    - 
@@ -52,13 +56,13 @@ Next steps would be:
 # The Pipeline
 
 ## Planning 
-Goal: Plan out the project
-How does certain features effect the logerror
+Goal: Plan out the project I will be seeing how square footage, bedroom count, longitude, latitude, acreage, age, and county relate to log error of Zestimates. I will try to cluster by location and by land features to see if it'll be helpful to a supervised regression model.
 
-I also want to look into other features, like age and see if that will also correlate to property value. 
-A lot of these features could play hand in hand and help my model make better predictions.
+First, I will begin by bringing in my data and exploring features to assure that I want to continue with clustering these (and/or others), I can then turn it into a cluster column and use feature selection to see if the clustering helps.
 
-Hypotheses: Square footage, beds and bathrooms, and location will have an effect on the logerror
+
+
+Hypotheses: Square footage, beds, acreage and location will have an effect on the logerror
 
 
 ## Acquire 
@@ -66,8 +70,6 @@ Goal: Have Zillow dataframe ready to prepare in first part of wrangle.py In this
 
 ## Prep 
 Goal: Have Zillow dataset that is split into train, validate, test, and ready to be analyzed. Assure data types are appropriate and that missing values/duplicates/outliers are addressed. Put this in our wrangle.py file as well. In this stage, I handled missing values by dropping any rows and columns with more than 50% missing data.
-
-I assured that all columns had a numeric data type, and renamed them for ease of use.
 
 Duplicates were dropped (in parcelid)
 
@@ -78,28 +80,29 @@ Nulls in calculatedbathnbr, full bath count, region id city, regionidzip, and ce
 Any remaining nulls after these were dropped. I split the data into train, validate, test, X_train, y_train, X_validate, y_validate, X_test, and y_test. Last, I scaled it on a StandardScaler scaler (I made sure to drop outliers first!) and also returned X_train, X_validate, and X_test scaled.
 
 ## Explore 
-Goal: Visualize the data and explore relationships. Use the visuals and statistics tests to help answer your questions. 
-I plotted distributions, made sure nothing was out of the ordinary after cleaning the dataset. 
-Plotted a pairplot to see combinations of variables.
-I ran t-tests with the features in respect to logerror. Also a few to see if the independent variables were related to each other. 
+Goal: Visualize the data. Explore relationships, and make clusters. Use the visuals and statistics tests to help answer my questions. I plotted distributions, made sure nothing was out of the ordinary after cleaning the dataset.
 
+I ran a few t-tests with the features in respect to log error to test for difference in means. Also did a few correlation tests for continuous variables.
 
-## Modeling and Evaluation 
-Goal: Along with regression models, clusters were used to identify statistical relationship to logerror
+I found that square footage, bedroom count, and acres over 2 were all statistically significant. They are not independent to logerror. Square footage less then 1500 did not have an effect on logerror
 
-The models worked best with xxxxxx. Polynomial Regression performed the best, so I did a test on it.
+## Modeling and Evaluation
+Goal: develop a regression model that performs better than the baseline.
 
-| Model                            | RMSE Training | RMSE Validate | R^2   |
-|----------------------------------|---------------|---------------|-------|
-| Baseline                         |     |    |  |
-| LinearRegression                 |     |    |  |
-| LassoLars                        |    |    |  |
-| TweedieRegressor                 |    |     |  |
-| PolynomialRegression (3 degrees) |     |     | |
+The models worked best with $/sqft, acres, cluster, and locations. Polynomial Regression performed the best, so I did a test on it.
 
-Test:
- - RMSE of 
- - R^2 of 
+Model	RMSE Training	RMSE Validate	R^2
+Baseline	0.1688	0.1632	0.00
+OLS LinearRegression	0.1687	0.1630	0.002
+LassoLars	0.1688	0.1632	0.00
+TweedieRegressor	0.1687	0.1630	0.002
+PolynomialRegression (2 degrees)	0.1687	0.1629	0.001
+Test for OLS Linear Regression:
+
+RMSE of 0.177
+R^2 of 0.003
+Mission Failed. We'll get them next time.
+
 
 ## Delivery 
 A final notebook walkthrough of the my findings will be given 
