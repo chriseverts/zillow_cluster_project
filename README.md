@@ -70,12 +70,13 @@ I incorporated clustering to discover keys drivers in logerror of zestimates usi
 - Logerror is effected by a combintaion of house features and also location + land
 
 ## Findings and Next Steps 
-   - 
+ - There appears to be distinct groups between longitude/latitude, and dollar per sqft/number of bedrooms, and acreage 
+ - Using recursive feature elimination, it selected dollar per sqft, number of bathrooms, county, census block, and calculatedbathnbr .
 
 
 Next steps would be:
  - gather more information on location
- -  
+ - Try out new combinations for clustering with these as well as other columns with other property features.
 
 
 # The Pipeline
