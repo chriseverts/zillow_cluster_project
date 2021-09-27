@@ -25,14 +25,39 @@ I incorporated clustering to discover keys drivers in logerror of zestimates usi
 
 ## Data Dictionary 
 
-| Column Name                  | Renamed   | Info                                            |
-|------------------------------|-----------|-------------------------------------------------|
-| 
+| Column Name               | Description                              |
+|---------------------------|------------------------------------------|
+| acres                     | number of acres (lotsize/43560)          |
+| age                       | 2017-yearbuilt                           |
+| baths                     | number of bathrooms                      |
+| bathsandbeds              | number of bathrooms and bedrooms         |
+| beds                      | number of bedrooms                       |
+| county                    | which county property is in              |
+| fips                      | FIPS code of property                    |
+| land_dollar_per_sqft      | landtaxvaluedollarcnt/sqft               |
+| latitude                  | latitude coordinate                      |
+| longitude                 | longitude coordinate                     |
+| los_angeles               | if property is in Los Angeles =1, else 0 |
+| lot_dollar                | dollar value for property land           |
+| orange                    | if property is in Orange =1, else 0      |
+| rawcensustractandblock    | census bureau data                       |
+| regionidzip               | zip code (not accurate)                  |
+| sqft                      | square footage of property               |
+| structure_dollar_per_sqft | dollar per square foot                   |
+| tax_amount                | tax amount of property                   |
+| tax_rate                  | tax rate of property                     |
+| tax_value                 | tax value of property                    |
+| ventura                   | if county is in Ventura =1, else 0       |
+| yearbuilt                 | year property was built                  |
+| propertylandusetype       | property type                            |
+| parcelid                  | property ID                              |
+
+
 <br>
 
 ##  Hypothesis 
 
-- Logerror is affected by squared feet over 1500 sq ft. 
+- Logerror is affected by squared feet over 1700 sq ft. 
 
 - Logerror is affected by the number of bedrooms
 
@@ -91,17 +116,19 @@ Goal: develop a regression model that performs better than the baseline.
 
 The models worked best with $/sqft, acres, cluster, and locations. Polynomial Regression performed the best, so I did a test on it.
 
-Model	RMSE Training	RMSE Validate	R^2
-Baseline	0.1688	0.1632	0.00
-OLS LinearRegression	0.1687	0.1630	0.002
-LassoLars	0.1688	0.1632	0.00
-TweedieRegressor	0.1687	0.1630	0.002
-PolynomialRegression (2 degrees)	0.1687	0.1629	0.001
-Test for OLS Linear Regression:
+| Model                            | RMSE Training | RMSE Validate | R^2   |
+|----------------------------------|---------------|---------------|-------|
+| Baseline                         | 0.1688        | 0.1608        | 0.00  |
+| OLS LinearRegression             | 0.1687        | 0.1602        | 0.003 |
+| LassoLars                        | 0.1688        | 0.1604        | 0.00  |
+| TweedieRegressor                 | 0.1687        | 0.1603        | 0.002 |
+| PolynomialRegression (3 degrees) | 0.1687        | 0.1602        | 0.002 |
+<br>
 
-RMSE of 0.177
-R^2 of 0.003
-Mission Failed. We'll get them next time.
+Test for OLS Linear Regression:
+ - RMSE of 0.174
+ - R^2 of 0.004
+
 
 
 ## Delivery 
@@ -112,6 +139,12 @@ A final notebook walkthrough of the my findings will be given
 
 # Conclusion 
 
+
+My clustering didn't help with my supervised model, however, I could not find the right combinations to make my model beat the baseline for predicting log error either.
+
+ - Log error was different for properties depending on county, number of bedrooms, dollar per square foot, and acres.
+ - I made clusters with tax value and square footage, longitude and latitude, and based on property features like age, dollar per sqft, and acreage. I also made one based on location (neighborhoods) which consisted of longitude, latitude, and acreage bins.
+  - My best model was my cubic model (3 degrees), but even though it surpassed the baseline on train and validate, it did not perform better on the test. The RMSE to beat was 0.160, but mine was 0.174. It did better on r^2 at only 0.002 though. 
 
 
 # How to Recreate Project
