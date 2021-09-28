@@ -18,8 +18,10 @@ Present a notebook about my findings
 
 ## Deliverables
 Finalized Jupyter notebook complete with comments
+
 A README.md with executive summary, contents, data dictionary, conclusion and next steps, and how to recreate this project.
-Link to my [trello board](https://trello.com/b/zSEZS5tf)
+
+Here is a provided link to my [trello board](https://trello.com/b/zSEZS5tf)
 
 ## Project Summary
 I incorporated clustering to discover keys drivers in logerror of zestimates using a Zillow data frame.
@@ -128,8 +130,8 @@ The models worked best with $/sqft, acres, cluster, and locations. Polynomial Re
 <br>
 
 Test for OLS Linear Regression:
- - RMSE of 0.174
- - R^2 of 0.004
+ - RMSE of 0.175
+ - R^2 of 0.001
 
 
 
@@ -146,7 +148,7 @@ My clustering didn't help with my supervised model, however, I could not find th
 
  - Log error was different for properties depending on county, number of bedrooms, dollar per square foot, and acres.
  - I made clusters with tax value and square footage, longitude and latitude, and based on property features like age, dollar per sqft, and acreage. I also made one based on location (neighborhoods) which consisted of longitude, latitude, and acreage bins.
-  - My best model was my cubic model (3 degrees), but even though it surpassed the baseline on train and validate, it did not perform better on the test. The RMSE to beat was 0.160, but mine was 0.174. It did better on r^2 at only 0.002 though. 
+  - My best model was my quadratic model (2 degrees), but even though it surpassed the baseline on train and validate, it did not perform better on the test. The RMSE to beat was 0.160, but mine was 0.175. It did better on r^2 at only 0.001 though. 
 
 
 # How to Recreate Project
