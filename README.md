@@ -18,7 +18,10 @@ Present a notebook about my findings
 
 ## Deliverables
 Finalized Jupyter notebook complete with comments
+
 A README.md with executive summary, contents, data dictionary, conclusion and next steps, and how to recreate this project.
+
+Here is a provided link to my [trello board](https://trello.com/b/zSEZS5tf)
 
 ## Project Summary
 I incorporated clustering to discover keys drivers in logerror of zestimates using a Zillow data frame.
@@ -119,16 +122,16 @@ The models worked best with $/sqft, acres, cluster, and locations. Polynomial Re
 
 | Model                            | RMSE Training | RMSE Validate | R^2   |
 |----------------------------------|---------------|---------------|-------|
-| Baseline                         | 0.1688        | 0.1608        | 0.00  |
-| OLS LinearRegression             | 0.1687        | 0.1602        | 0.003 |
-| LassoLars                        | 0.1688        | 0.1604        | 0.00  |
-| TweedieRegressor                 | 0.1687        | 0.1603        | 0.002 |
-| PolynomialRegression (3 degrees) | 0.1687        | 0.1602        | 0.002 |
+| Baseline                         | 0.1718        | 0.1605        | 0.000 |
+| OLS LinearRegression             | 0.1716        | 0.1602        | 0.003 |
+| LassoLars                        | 0.1718        | 0.1604        | 0.000 |
+| TweedieRegressor                 | 0.1717        | 0.1603        | 0.002 |
+| PolynomialRegression (2 degrees) | 0.1715        | 0.1602        | 0.003 |
 <br>
 
 Test for OLS Linear Regression:
  - RMSE of 0.174
- - R^2 of 0.004
+ - R^2 of 0.003
 
 
 
@@ -145,7 +148,7 @@ My clustering didn't help with my supervised model, however, I could not find th
 
  - Log error was different for properties depending on county, number of bedrooms, dollar per square foot, and acres.
  - I made clusters with tax value and square footage, longitude and latitude, and based on property features like age, dollar per sqft, and acreage. I also made one based on location (neighborhoods) which consisted of longitude, latitude, and acreage bins.
-  - My best model was my cubic model (3 degrees), but even though it surpassed the baseline on train and validate, it did not perform better on the test. The RMSE to beat was 0.160, but mine was 0.174. It did better on r^2 at only 0.002 though. 
+  - My best model was my quadratic model (2 degrees), but even though it surpassed the baseline on train and validate, it did not perform better on the test. The RMSE to beat was 0.160, but mine was 0.174. It did better on r^2 at only 0.003 though. 
 
 
 # How to Recreate Project
