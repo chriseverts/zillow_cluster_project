@@ -114,7 +114,4 @@ def nulls_by_row(df):
 
 
 
-## Mall Customers
-def get_mallcustomer_data():
-    df = pd.read_sql('SELECT * FROM customers;', get_connection('mall_customers'))
-    return df.set_index('customer_id')
+
