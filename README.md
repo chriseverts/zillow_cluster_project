@@ -19,6 +19,7 @@ Present a notebook about my findings
 ## Deliverables
 Finalized Jupyter notebook complete with comments
 A README.md with executive summary, contents, data dictionary, conclusion and next steps, and how to recreate this project.
+Link to my [trello board](https://trello.com/b/zSEZS5tf)
 
 ## Project Summary
 I incorporated clustering to discover keys drivers in logerror of zestimates using a Zillow data frame.
